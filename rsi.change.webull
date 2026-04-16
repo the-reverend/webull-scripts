@@ -1,0 +1,34 @@
+length = define(default_value=14,   min=1,   max=100,    name="RSI Length")
+upper  = define(default_value=8,    min=1,   max=50,     name="Upper")
+lower  = define(default_value=-8,   min=-50, max=-1,     name="Lower")
+pos    = define(default_value=5000, min=1,   max=100000, name="Position Size $$")
+volMul = define(default_value=5,    min=1,   max=20,     name="Volume X for Pos")
+ema1w  = define(default_value=5,    min=3,   max=21,     name="Fast EMA")
+ema2w  = define(default_value=15,   min=7,   max=60,     name="Slow EMA")
+
+shares = pos / close
+enufVol = math.max(volume[0],volume[1]) > (shares*volMul)
+
+rsi = ind.rsi(close,length)
+ch = rsi[0] - rsi[1] // rsi change from previous candle
+ema1 = ind.ema(close, ema1w)
+ema2 = ind.ema(close, ema2w)
+uptrend = ema1 > ema2
+
+exit   = close <= low[1]
+entry  = ch >= upper and enufVol and uptrend and not exit
+entry2 = ch >= upper and uptrend             and not (exit or entry)
+entry3 = ch >= upper                         and not (exit or entry or entry2)
+up     = ch >= 0                             and not (exit or entry or entry2 or entry3)
+dn     =                                         not (exit or entry or entry2 or entry3 or up)
+
+plt(entry  ? ch : none, color=color.lime, type=plt.type_columns, opacity=100, base_line=0, name="Entry")
+plt(entry2 ? ch : none, color=#fadb14,    type=plt.type_columns, opacity=100, base_line=0, name="LVEntry")
+plt(entry3 ? ch : none, color=#fb9e53,    type=plt.type_columns, opacity=100, base_line=0, name="DTEntry")
+plt(up     ? ch : none, color=#b7eb8f,    type=plt.type_columns, opacity=100, base_line=0, name="Up")
+plt(dn     ? ch : none, color=#ffa39e,    type=plt.type_columns, opacity=100, base_line=0, name="Dn")
+plt(exit   ? ch : none, color=#a164e5,    type=plt.type_columns, opacity=100, base_line=0, name="Exit")
+
+hline(upper, name="Upper", color=color.green, line_type=hline.type_dotted)
+hline(0,     name="Zero",  color=#e8e8e8,     line_type=hline.type_dotted)
+hline(lower, name="Lower", color=color.red,   line_type=hline.type_dotted)
