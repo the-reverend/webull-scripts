@@ -23,23 +23,24 @@ enufVol = math.max(volume[0],volume[1]) > (shares*volMul)
 
 rsi = ind.rsi(close,length)
 ch = rsi[0] - rsi[1] // rsi change from previous candle
+
 ema1 = ind.ema(close, ema1w)
 ema2 = ind.ema(close, ema2w)
 uptrend = ema1 > ema2
 
-exit   = close <= low[1]
-entry  = ch >= upper and enufVol and uptrend and not exit
-entry2 = ch >= upper and uptrend             and not (exit or entry)
-entry3 = ch >= upper                         and not (exit or entry or entry2)
-up     = ch >= 0                             and not (exit or entry or entry2 or entry3)
-dn     =                                         not (exit or entry or entry2 or entry3 or up)
+exit = close <= low[1]
+ent1 = ch >= upper and enufVol and uptrend and not exit
+ent2 = ch >= upper and uptrend             and not (exit or entry)
+ent3 = ch >= upper                         and not (exit or entry or entry2)
+up   = ch >= 0                             and not (exit or entry or entry2 or entry3)
+dn   =                                         not (exit or entry or entry2 or entry3 or up)
 
-plt(entry  ? ch : none, color=color.lime, type=plt.type_columns, opacity=100, base_line=0, name="Entry")
-plt(entry2 ? ch : none, color=#fadb14,    type=plt.type_columns, opacity=100, base_line=0, name="LVEntry")
-plt(entry3 ? ch : none, color=#fb9e53,    type=plt.type_columns, opacity=100, base_line=0, name="DTEntry")
-plt(up     ? ch : none, color=#b7eb8f,    type=plt.type_columns, opacity=100, base_line=0, name="Up")
-plt(dn     ? ch : none, color=#ffa39e,    type=plt.type_columns, opacity=100, base_line=0, name="Dn")
-plt(exit   ? ch : none, color=#a164e5,    type=plt.type_columns, opacity=100, base_line=0, name="Exit")
+plt(ent1 ? ch : none, color=color.lime, type=plt.type_columns, opacity=100, base_line=0, name="Entry")
+plt(ent2 ? ch : none, color=#fadb14,    type=plt.type_columns, opacity=100, base_line=0, name="LVEntry")
+plt(ent3 ? ch : none, color=#fb9e53,    type=plt.type_columns, opacity=100, base_line=0, name="DTEntry")
+plt(up   ? ch : none, color=#b7eb8f,    type=plt.type_columns, opacity=100, base_line=0, name="Up")
+plt(dn   ? ch : none, color=#ffa39e,    type=plt.type_columns, opacity=100, base_line=0, name="Dn")
+plt(exit ? ch : none, color=#a164e5,    type=plt.type_columns, opacity=100, base_line=0, name="Exit")
 
 hline(upper, name="Upper", color=color.green, line_type=hline.type_dotted)
 hline(0,     name="Zero",  color=#e8e8e8,     line_type=hline.type_dotted)
