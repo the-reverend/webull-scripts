@@ -1,13 +1,13 @@
 // rsi.change
 // when the RSI changes by some amount, flag it as a possible entry.
-//
+// 
 // on the long side, there are 3 entries defined:
 // 1. RSI up more than threshold, in an uptrend based on EMA crossing, and there is enough volume -- LIME GREEN -- strong entry
 // 2. RSI up more than threshold, in an uptrend on low volume -- YELLOW -- good entry
 // 3. RSI up more than threshold, in a downtrend -- ORANGE -- cautious entry, looking for reversal
-//
+// 
 // on the short side, there is nothing defined. i'm a long-biased trader, so i didn't do anything except show a horizontal line.
-//
+// 
 // exit when the close of the current candle is below the low of the previous -- PURPLE
 
 length = define(default_value=14,   min=1,   max=100,    name="RSI Length")
