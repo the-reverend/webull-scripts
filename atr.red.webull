@@ -1,0 +1,23 @@
+// atr.red
+// 
+// when a red candle is larger than the ATR value, this can be used for a long entry, especially in an uptrend
+// 
+// * blue dot on red candles that meet the ATR + uptrend
+// * red dot at a stop signal where price drops another ATR down increment, or multiple thereof
+// * green dot at a profit signal where price exceeds another ATR increment up, or a multiple thereof
+
+length = define(default_value=14, min=1, max=200, name="ATR Length")
+um     = define(default_value=1,  min=1, max=50,  name="Profit Multiplier")
+lm     = define(default_value=1,  min=1, max=50,  name="Stop Multiplier")
+ema1w  = define(default_value=5,  min=3, max=21,  name="Fast EMA")
+ema2w  = define(default_value=15, min=7, max=60,  name="Slow EMA")
+
+ema1 = ind.ema(close, ema1w)
+ema2 = ind.ema(close, ema2w)
+uptrend = ema1 > ema2
+atr = ind.atr(length)
+trig = (open - close) > atr and uptrend
+
+plt(trig?close+atr*um:none, "Profit", color=color.green, type=plt.type_circles)
+plt(trig? close : none, name="ATR-Red", color=color.blue, type=plt.type_circles)
+plt(trig?close-atr*lm:none, "Stop", color=color.red, type=plt.type_circles)
