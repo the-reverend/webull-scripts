@@ -1,0 +1,11 @@
+// blue.momo
+
+vmaLen  = define(default_value=50, min=3, max=200, name="VMA Length")
+vmaMult = define(default_value=2,  min=1, max=10,  name="VMA Multiplier")
+emaLen  = define(default_value=3,  min=2, max=60,  name="price EMA length")
+
+vma = ind.sma(volume, vmaLen)
+
+mover = volume > vma[1]*vmaMult and close>ind.ema(close, emaLen)
+plt(mover?close:none, name="blue-momo", color=color.navy, type=plt.type_circles)
+
