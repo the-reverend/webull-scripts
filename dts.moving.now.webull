@@ -1,0 +1,10 @@
+// dts-moving-now
+
+vmaLen  = define(default_value=50, min=3, max=200, name="VMA Length")
+vmaMult = define(default_value=2,  min=1, max=10,  name="VMA Multiplier")
+lookback  = define(default_value=10,  min=2, max=60,  name="Lookback Length")
+
+vma = ind.sma(volume, vmaLen)
+buy = close > open and volume > vma[1]*vmaMult and close > math.highest(close,lookback)[1] and volume > math.highest(volume,lookback)[1]
+
+plt(buy and not buy[1]?close:none, name="moving-now", color=color.fuchsia, type=plt.type_circles)
