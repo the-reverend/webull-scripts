@@ -1,0 +1,51 @@
+// Team2Ripster
+// Multi-EMA Channel Indicator //
+// version 2.3 - Named Boundary Lines //
+// Created 9/2025 by DashingBixby//
+// Creates clouds based on specific upper and lower EMA boundaries, much like Ripster does, but intentionally leverages the 13/48/200 EMAs for 0DTEs as Team2Trading does.
+
+// Define the source for calculations
+src = hl2
+
+// --- EMA Calculations based on the provided table ---
+
+// Fast Cloud EMAs
+fastUpper = ind.ema(src, 16)
+fastTarget = ind.ema(src, 13)
+fastLower = ind.ema(src, 10)
+
+// Medium Cloud EMAs
+mediumUpper = ind.ema(src, 58)
+mediumTarget = ind.ema(src, 48)
+mediumLower = ind.ema(src, 38)
+
+// Slow Cloud EMAs
+slowUpper = ind.ema(src, 240)
+slowTarget = ind.ema(src, 200)
+slowLower = ind.ema(src, 160)
+
+
+// --- Plotting ---
+
+//Fast Targets
+p_fastLower = plt(fastLower, name="Fast Low", color=#FFD700)
+plt(fastTarget, name="Fast Tgt", color=#FFD700, line_width=3) // Yellow
+p_fastUpper = plt(fastUpper, name="Fast Up", color=#FFD700)
+
+//Medium Targets
+p_mediumLower = plt(mediumLower, name="Med Low", color=#9C27B0)
+plt(mediumTarget, name="Med Tgt", color=#9C27B0, line_width=3) // Purple
+p_mediumUpper = plt(mediumUpper, name="Med Up", color=#9C27B0)
+
+//Slow Targets
+p_slowLower = plt(slowLower, name="Slow Low", color=#f44336)
+plt(slowTarget, name="Slow Tgt", color=#f44336, line_width=3) // Red
+p_slowUpper = plt(slowUpper, name="Slow Up", color=#f44336)
+
+
+// Fill the areas between the boundaries to create the clouds, matching the target line colors.
+// They are drawn from widest (Slow) to narrowest (Fast) for proper layering.
+plt.fill_between(p_slowUpper, p_slowLower, color=#f44336, opacity=20, name="Slow Channel") // Red
+plt.fill_between(p_mediumUpper, p_mediumLower, color=#9C27B0, opacity=20, name="Medium Channel") // Purple
+plt.fill_between(p_fastUpper, p_fastLower, color=#FFD700, opacity=20, name="Fast Channel") // Yellow
+

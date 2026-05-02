@@ -1,0 +1,39 @@
+// RIPSTER INSPIRED CLOUDS//
+// Created 9/2025 by DashingBixby
+// version 1.1 - Interior Clouds Added //
+// Designed for Webull
+
+study(title="Ripster Clouds - Multi-Layer", shorttitle = "Ripster Clouds", overlay = true)
+
+// Define source to match TradingView script (hl2 = (high+low)/2)
+src = hl2
+
+// EMA Calculations for all cloud layers
+EMA5 = ind.ema(src, 5)
+EMA12 = ind.ema(src, 12)
+EMA8 = ind.ema(src, 8)
+EMA21 = ind.ema(src, 21)
+EMA34 = ind.ema(src, 34)
+EMA50 = ind.ema(src, 50)
+
+// Plot EMA Lines but make them invisible by setting color to 'none'
+innercloud1 = plt(EMA5, name = "EMA5", color = none)
+innercloud2 = plt(EMA12, name = "EMA12", color = none)
+outercloud1 = plt(EMA8, name = "EMA8", color = none)
+outercloud2 = plt(EMA21, name = "EMA21", color = none)
+bottomcloud1 = plt(EMA34, name = "EMA34", color = none)
+bottomcloud2 = plt(EMA50, name = "EMA50", color = none)
+
+// Determine the fill color for each cloud using hex codes from the original script
+// Inner Cloud (5/12 EMA) - Darker colors
+innerCloudColor = EMA5 > EMA12 ? #036103 : #880e4f
+// Outer Cloud (8/21 EMA) - Lighter colors
+outerCloudColor = EMA8 > EMA21 ? #4caf50 : #f44336
+// Bottom Cloud (34/50 EMA) - Blue/Orange
+bottomCloudColor = EMA34 > EMA50 ? #2196f3 : #ffb74d
+
+// Fill the clouds, drawing the widest clouds first, then the narrower ones on top.
+plt.fill_between(bottomcloud1, bottomcloud2, color=bottomCloudColor, opacity=30, name="34-50 Cloud")
+plt.fill_between(outercloud1, outercloud2, color=outerCloudColor, opacity=35, name="8-21 Cloud")
+plt.fill_between(innercloud1, innercloud2, color=innerCloudColor, opacity=45, name="5-12 Cloud")
+

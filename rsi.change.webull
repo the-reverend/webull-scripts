@@ -30,10 +30,10 @@ uptrend = ema1 > ema2
 
 exit = close <= low[1]
 ent1 = ch >= upper and enufVol and uptrend and not exit
-ent2 = ch >= upper and uptrend             and not (exit or entry)
-ent3 = ch >= upper                         and not (exit or entry or entry2)
-up   = ch >= 0                             and not (exit or entry or entry2 or entry3)
-dn   =                                         not (exit or entry or entry2 or entry3 or up)
+ent2 = ch >= upper and uptrend             and not (exit or ent1)
+ent3 = ch >= upper                         and not (exit or ent1 or ent2)
+up   = ch >= 0                             and not (exit or ent1 or ent2 or ent3)
+dn   =                                         not (exit or ent1 or ent2 or ent3 or up)
 
 plt(ent1 ? ch : none, color=color.lime, type=plt.type_columns, opacity=100, base_line=0, name="Entry")
 plt(ent2 ? ch : none, color=#fadb14,    type=plt.type_columns, opacity=100, base_line=0, name="LVEntry")
